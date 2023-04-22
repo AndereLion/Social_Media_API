@@ -5,14 +5,20 @@ from rest_framework_simplejwt.views import (
     TokenRefreshView,
     TokenVerifyView,
 )
-from user.views import UserProfileViewSet, toggle_following, UserFollowersViewSet, UserFollowingViewSet
+from user.views import (
+    UserProfileViewSet,
+    toggle_following,
+    UserFollowersViewSet,
+    UserFollowingViewSet
+)
 from user.views import CreateUserView, ManageUserView
 
 app_name = "user"
 router = routers.DefaultRouter()
 router.register("profile", UserProfileViewSet)
-router.register("my_followers", UserFollowersViewSet)
 router.register("my_following", UserFollowingViewSet)
+router.register("my_followers", UserFollowersViewSet)
+
 urlpatterns = [
     path("", include(router.urls)),
 

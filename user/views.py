@@ -5,7 +5,6 @@ from rest_framework import generics, viewsets, status, mixins
 from rest_framework.decorators import action, api_view
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.authtoken.views import ObtainAuthToken
-from rest_framework.renderers import JSONRenderer
 from rest_framework.request import Request
 from rest_framework.response import Response
 from rest_framework.settings import api_settings
@@ -39,6 +38,13 @@ class UserProfileViewSet(viewsets.ModelViewSet):
 
     def perform_create(self, serializer) -> None:
         serializer.save(user=self.request.user)
+
+    def get_queryset(self):
+        email = self.request.query_params.get("email", None)
+        queryset = self.queryset
+        if email:
+            queryset = queryset.filter(user__email__icontains=email)
+        return queryset
 
     def get_serializer_class(self):
         if self.action == "list":
@@ -87,7 +93,12 @@ class UserFollowersViewSet(
 
     def get_queryset(self):
         my_user = get_user_model().objects.get(id=self.request.user.id)
-        return my_user.profile.followers.all()
+        queryset = my_user.profile.followers.all()
+        email = self.request.query_params.get("email", None)
+
+        if email:
+            queryset = queryset.filter(email__icontains=email)
+        return queryset
 
 
 class UserFollowingViewSet(
@@ -99,4 +110,8 @@ class UserFollowingViewSet(
     permission_classes = (IsAuthenticated,)
 
     def get_queryset(self):
-        return self.queryset.filter(profile__followers=self.request.user.id)
+        email = self.request.query_params.get("email", None)
+        queryset = self.queryset
+        if email:
+            queryset = queryset.filter(email__icontains=email)
+        return queryset.filter(profile__followers=self.request.user.id)
