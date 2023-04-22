@@ -1,5 +1,9 @@
+import os
+import uuid
+
 from django.conf import settings
 from django.db import models
+from django.utils.text import slugify
 from django.utils.translation import gettext as _
 from django.contrib.auth.models import AbstractUser, BaseUserManager
 
@@ -65,6 +69,13 @@ class User(AbstractUser):
     objects = UserManager()
 
 
+def movie_image_file_path(instance, filename):
+    _, extension = os.path.splitext(filename)
+    filename = f"{slugify(instance.user.email)}-{uuid.uuid4()}{extension}"
+
+    return os.path.join("uploads/profiles/", filename)
+
+
 class UserProfile(models.Model):
     user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='profile')
     description = models.CharField(max_length=100, default='')
@@ -73,8 +84,7 @@ class UserProfile(models.Model):
     phone = models.IntegerField(default=0)
     bio = models.TextField(default='')
     followers = models.ManyToManyField(settings.AUTH_USER_MODEL, related_name='profiles', blank=True)
-
-    # image = models.ImageField(upload_to='profile_image', blank=True)
+    image = models.ImageField(null=True, upload_to=movie_image_file_path)
 
     def __str__(self):
         return self.description

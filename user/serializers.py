@@ -82,3 +82,7 @@ class UserProfileListSerializer(serializers.ModelSerializer):
         fields = ("id", "user", "description", "city", "website", "phone", "bio", "followers")
 
 
+class UserProfileImageSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = UserProfile
+        fields = ("id", "image")
