@@ -6,7 +6,7 @@ import user.models
 
 class Migration(migrations.Migration):
     dependencies = [
-        ("user", "0006_alter_userprofile_user"),
+        ("author", "0006_alter_userprofile_user"),
     ]
 
     operations = [

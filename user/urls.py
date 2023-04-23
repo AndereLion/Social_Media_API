@@ -13,7 +13,7 @@ from user.views import (
 )
 from user.views import CreateUserView, ManageUserView
 
-app_name = "user"
+app_name = "author"
 router = routers.DefaultRouter()
 router.register("profile", UserProfileViewSet)
 router.register("my_following", UserFollowingViewSet)

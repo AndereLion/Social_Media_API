@@ -7,7 +7,7 @@ import django.db.models.deletion
 
 class Migration(migrations.Migration):
     dependencies = [
-        ("user", "0001_initial"),
+        ("author", "0001_initial"),
     ]
 
     operations = [
@@ -29,7 +29,7 @@ class Migration(migrations.Migration):
                 ("phone", models.IntegerField(default=0)),
                 ("bio", models.TextField(default="")),
                 (
-                    "user",
+                    "author",
                     models.OneToOneField(
                         on_delete=django.db.models.deletion.CASCADE,
                         to=settings.AUTH_USER_MODEL,

@@ -28,7 +28,7 @@ class ManageUserView(generics.RetrieveUpdateAPIView):
     permission_classes = (IsAuthenticated,)
 
     def get_object(self) -> Request:
-        return self.request.user
+        return self.request.author
 
 
 class UserProfileViewSet(viewsets.ModelViewSet):
@@ -37,7 +37,7 @@ class UserProfileViewSet(viewsets.ModelViewSet):
     permission_classes = (IsAuthenticated,)
 
     def perform_create(self, serializer) -> None:
-        serializer.save(user=self.request.user)
+        serializer.save(user=self.request.author)
 
     def get_queryset(self):
         email = self.request.query_params.get("email", None)
@@ -92,7 +92,7 @@ class UserFollowersViewSet(
     permission_classes = (IsAuthenticated,)
 
     def get_queryset(self):
-        my_user = get_user_model().objects.get(id=self.request.user.id)
+        my_user = get_user_model().objects.get(id=self.request.author.id)
         queryset = my_user.profile.followers.all()
         email = self.request.query_params.get("email", None)
 
@@ -114,4 +114,4 @@ class UserFollowingViewSet(
         queryset = self.queryset
         if email:
             queryset = queryset.filter(email__icontains=email)
-        return queryset.filter(profile__followers=self.request.user.id)
+        return queryset.filter(profile__followers=self.request.author.id)

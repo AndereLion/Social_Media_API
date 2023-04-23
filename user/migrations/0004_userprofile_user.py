@@ -7,13 +7,13 @@ import django.db.models.deletion
 
 class Migration(migrations.Migration):
     dependencies = [
-        ("user", "0003_remove_userprofile_user"),
+        ("author", "0003_remove_userprofile_user"),
     ]
 
     operations = [
         migrations.AddField(
             model_name="userprofile",
-            name="user",
+            name="author",
             field=models.OneToOneField(
                 default=1,
                 on_delete=django.db.models.deletion.CASCADE,
