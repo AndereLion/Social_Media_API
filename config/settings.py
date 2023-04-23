@@ -105,7 +105,7 @@ AUTH_PASSWORD_VALIDATORS = [
 # Internationalization
 # https://docs.djangoproject.com/en/4.2/topics/i18n/
 
-AUTH_USER_MODEL = "author.User"
+AUTH_USER_MODEL = "user.User"
 
 LANGUAGE_CODE = 'en-us'
 
@@ -130,7 +130,7 @@ REST_FRAMEWORK = {
         "rest_framework.throttling.AnonRateThrottle",
         "rest_framework.throttling.UserRateThrottle",
     ],
-    "DEFAULT_THROTTLE_RATES": {"anon": "10/min", "author": "30/min"},
+    "DEFAULT_THROTTLE_RATES": {"anon": "10/min", "user": "30/min"},
     "DEFAULT_SCHEMA_CLASS": "drf_spectacular.openapi.AutoSchema",
     "DEFAULT_AUTHENTICATION_CLASSES": (
         "rest_framework_simplejwt.authentication.JWTAuthentication",

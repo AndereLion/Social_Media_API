@@ -13,7 +13,7 @@ class UserSerializer(serializers.ModelSerializer):
         extra_kwargs = {"password": {"write_only": True, "min_length": 5}}
 
     def create(self, validated_data: dict) -> get_user_model():
-        """Create a new author with encrypted password and return it"""
+        """Create a new user with encrypted password and return it"""
         return get_user_model().objects.create_user(**validated_data)
 
     def update(
@@ -21,7 +21,7 @@ class UserSerializer(serializers.ModelSerializer):
             instance: get_user_model(),
             validated_data: dict
     ) -> get_user_model():
-        """Update a author, set the password correctly and return it"""
+        """Update a user, set the password correctly and return it"""
         password = validated_data.pop("password", None)
         user = super().update(instance, validated_data)
         if password:
@@ -66,7 +66,7 @@ class AuthTokenSerializer(serializers.Serializer):
                 code="authorization"
             )
 
-        attrs["author"] = user
+        attrs["user"] = user
         return attrs
 
 
@@ -79,7 +79,7 @@ class UserProfileSerializer(serializers.ModelSerializer):
 class UserProfileListSerializer(serializers.ModelSerializer):
     class Meta:
         model = UserProfile
-        fields = ("id", "author", "description", "city", "website", "phone", "bio", "followers")
+        fields = ("id", "user", "description", "city", "website", "phone", "bio", "followers")
 
 
 class UserProfileImageSerializer(serializers.ModelSerializer):
