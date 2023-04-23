@@ -22,11 +22,17 @@ class PostViewSet(viewsets.ModelViewSet):
         hashtags = self.request.query_params.get("hashtags", None)
         if hashtags:
             hashtags_ids = self._params_to_ints(hashtags)
-            queryset = queryset.filter(hashtags__id__in=hashtags_ids)
+            queryset = queryset.filter(
+                hashtags__id__in=hashtags_ids
+            )
 
         user = self.request.user
-        following = get_user_model().objects.filter(profile__followers=user.id)
-        return queryset.filter(Q(author=user) | Q(author__in=following))
+        following = get_user_model().objects.filter(
+            profile__followers=user.id
+        )
+        return queryset.filter(
+            Q(author=user) | Q(author__in=following)
+        ).prefetch_related("hashtags").distinct()
 
     def perform_create(self, serializer) -> None:
         serializer.save(author=self.request.user)

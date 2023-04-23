@@ -49,7 +49,7 @@ class UserProfileViewSet(viewsets.ModelViewSet):
         queryset = self.queryset
         if email:
             queryset = queryset.filter(user__email__icontains=email)
-        return queryset
+        return queryset.select_related("user").prefetch_related("followers")
 
     def get_serializer_class(self):
         if self.action == "list":
@@ -92,13 +92,12 @@ class UserFollowersViewSet(
     mixins.ListModelMixin,
     viewsets.GenericViewSet,
 ):
-    queryset = get_user_model().objects.all()
+    queryset = get_user_model().objects.all().select_related("profile")
     serializer_class = UserSerializer
     permission_classes = (IsAuthenticated,)
 
     def get_queryset(self) -> QuerySet:
-        my_user = get_user_model().objects.get(id=self.request.user.id)
-        queryset = my_user.profile.followers.all()
+        queryset = self.request.user.profile.followers.all()
         email = self.request.query_params.get("email", None)
 
         if email:

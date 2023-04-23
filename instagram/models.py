@@ -21,8 +21,14 @@ class Hashtag(models.Model):
 
 
 class Post(models.Model):
-    author = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='posts')
-    hashtags = models.ManyToManyField(Hashtag, blank=True, related_name='posts')
+    author = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.CASCADE,
+        related_name='posts'
+    )
+    hashtags = models.ManyToManyField(
+        Hashtag, blank=True, related_name='posts'
+    )
     image = models.ImageField(null=True, upload_to=movie_image_file_path)
     caption = models.TextField(blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
@@ -33,8 +39,16 @@ class Post(models.Model):
 
 
 class Comment(models.Model):
-    post = models.ForeignKey(Post, on_delete=models.CASCADE, related_name='comments')
-    author = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='comments')
+    post = models.ForeignKey(
+        Post,
+        on_delete=models.CASCADE,
+        related_name='comments'
+    )
+    author = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.CASCADE,
+        related_name='comments'
+    )
     text = models.TextField()
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
