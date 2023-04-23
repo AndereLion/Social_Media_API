@@ -1,5 +1,5 @@
-from django.conf import settings
 from django.contrib.auth import get_user_model
+from django.db.models import QuerySet
 from django.http import HttpResponse
 from rest_framework import generics, viewsets, status, mixins
 from rest_framework.decorators import action, api_view
@@ -10,8 +10,13 @@ from rest_framework.response import Response
 from rest_framework.settings import api_settings
 
 from user.models import UserProfile
-from user.serializers import UserSerializer, AuthTokenSerializer, UserProfileSerializer, UserProfileListSerializer, \
+from user.serializers import (
+    UserSerializer,
+    AuthTokenSerializer,
+    UserProfileSerializer,
+    UserProfileListSerializer,
     UserProfileImageSerializer
+)
 
 
 class CreateUserView(generics.CreateAPIView):
@@ -39,7 +44,7 @@ class UserProfileViewSet(viewsets.ModelViewSet):
     def perform_create(self, serializer) -> None:
         serializer.save(user=self.request.user)
 
-    def get_queryset(self):
+    def get_queryset(self) -> QuerySet:
         email = self.request.query_params.get("email", None)
         queryset = self.queryset
         if email:
@@ -73,7 +78,7 @@ class UserProfileViewSet(viewsets.ModelViewSet):
 
 
 @api_view(["GET"])
-def toggle_following(request, pk):
+def toggle_following(request, pk: int) -> HttpResponse:
     my_user = get_user_model().objects.get(id=request.user.id)
     gest_user = get_user_model().objects.get(id=pk)
     if my_user in gest_user.profile.followers.all():
@@ -91,7 +96,7 @@ class UserFollowersViewSet(
     serializer_class = UserSerializer
     permission_classes = (IsAuthenticated,)
 
-    def get_queryset(self):
+    def get_queryset(self) -> QuerySet:
         my_user = get_user_model().objects.get(id=self.request.user.id)
         queryset = my_user.profile.followers.all()
         email = self.request.query_params.get("email", None)
@@ -109,7 +114,7 @@ class UserFollowingViewSet(
     serializer_class = UserSerializer
     permission_classes = (IsAuthenticated,)
 
-    def get_queryset(self):
+    def get_queryset(self) -> QuerySet:
         email = self.request.query_params.get("email", None)
         queryset = self.queryset
         if email:

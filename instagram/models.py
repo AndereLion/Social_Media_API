@@ -6,7 +6,7 @@ from django.db import models
 from django.utils.text import slugify
 
 
-def movie_image_file_path(instance, filename):
+def movie_image_file_path(instance, filename: str) -> str:
     _, extension = os.path.splitext(filename)
     filename = f"{slugify(instance.id)}-{uuid.uuid4()}{extension}"
 
@@ -16,7 +16,7 @@ def movie_image_file_path(instance, filename):
 class Hashtag(models.Model):
     name = models.CharField(max_length=255, unique=True)
 
-    def __str__(self):
+    def __str__(self) -> str:
         return self.name
 
 
@@ -28,7 +28,7 @@ class Post(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
-    def __str__(self):
+    def __str__(self) -> str:
         return self.caption
 
 
@@ -39,5 +39,5 @@ class Comment(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
-    def __str__(self):
+    def __str__(self) -> str:
         return self.text

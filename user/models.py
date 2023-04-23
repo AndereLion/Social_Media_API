@@ -69,7 +69,7 @@ class User(AbstractUser):
     objects = UserManager()
 
 
-def movie_image_file_path(instance, filename):
+def movie_image_file_path(instance, filename: str) -> str:
     _, extension = os.path.splitext(filename)
     filename = f"{slugify(instance.user.email)}-{uuid.uuid4()}{extension}"
 
@@ -86,5 +86,5 @@ class UserProfile(models.Model):
     followers = models.ManyToManyField(settings.AUTH_USER_MODEL, related_name='profiles', blank=True)
     image = models.ImageField(null=True, upload_to=movie_image_file_path)
 
-    def __str__(self):
+    def __str__(self) -> str:
         return self.description
