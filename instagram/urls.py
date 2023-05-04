@@ -9,7 +9,4 @@ router = routers.SimpleRouter()
 router.register("post", PostViewSet)
 urlpatterns = [
     path("", include(router.urls)),
-
-    # path("<int:pk>/like/", like_post, name="like-post"),
-    # path("liked/", LikedPostList.as_view(), name="liked-post-list"),
 ]
